@@ -19,7 +19,9 @@ before_script:
     - android-wait-for-emulator
     - adb shell input keyevent 82 &
 script:
-  - ./gradlew connectedAndroidTest
-  - sonar-scanner
-#script:
-#  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - ./gradlew build connectedCheck
+  - ./gradlew sonarqube \
+    -Dsonar.projectKey=Dionrats_StudyBitsDocumentsApp \
+    -Dsonar.organization=dionrats-github \
+    -Dsonar.host.url=https://sonarcloud.io \
+    -Dsonar.login=$SONAR_TOKEN

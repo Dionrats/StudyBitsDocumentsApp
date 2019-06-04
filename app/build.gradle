@@ -1,4 +1,10 @@
-apply plugin: 'com.android.application'
+//apply plugin: "org.sonarqube"
+//apply plugin: 'com.android.application'
+plugins {
+    id "com.android.application"
+    id "org.sonarqube" version "2.7"
+}
+
 
 android {
     compileSdkVersion 28
@@ -41,7 +47,6 @@ android {
         disable 'InvalidPackage'
     }
 }
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
