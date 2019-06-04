@@ -10,13 +10,16 @@ licenses:
 addons:
   sonarcloud:
     organization: "dionrats-github"
+    token:
+      secure: $SONAR_TOKEN
 before_script:
   # Create and start emulator
-  - echo no | android create avd --force -n test -t android-28 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-28 
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 script:
-  ./gradlew connectedAndroidTest
+  - ./gradlew connectedAndroidTest
+  - sonar-scanner
 #script:
 #  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
