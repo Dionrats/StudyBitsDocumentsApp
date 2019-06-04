@@ -7,23 +7,16 @@ android:
 licenses:
   - 'build-tools;28.0.3'
   - 'Android SDK Build-Tools 28.0.3'
-#addons:
-#  sonarcloud:
-#    organization: "dionrats-github"
-#  apt:
-#    packages:
-#      - oracle-java8-installer
-#before_install:
-#  - chmod +x mvnw
-#services:
-#  - 'docker'
-#install:
-#  - mvn install
+addons:
+  sonarcloud:
+    organization: "dionrats-github"
+before_script:
+  # Create and start emulator
+  - echo no | android create avd --force -n test -t android-28 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+script:
+  ./gradlew connectedAndroidTest
 #script:
 #  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-##after_success:
-#  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
-#    ./mvnw install dockerfile:build ;
-#    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
-#    docker push drats/documents ;
-#    fi
