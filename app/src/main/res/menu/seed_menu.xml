@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".interfaces.activities.LoginActivity">
+    <item
+        android:id="@+id/seed_settings"
+        android:orderInCategory="100"
+        android:title="@string/seed_settings"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:onClick="seed"
+        app:showAsAction="always" />
+</menu>

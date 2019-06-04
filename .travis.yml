@@ -1,0 +1,27 @@
+language: android
+dist: trusty
+android:
+  components:
+    - build-tools-3.4.1
+    - android-28
+
+#addons:
+#  sonarcloud:
+#    organization: "dionrats-github"
+#  apt:
+#    packages:
+#      - oracle-java8-installer
+#before_install:
+#  - chmod +x mvnw
+#services:
+#  - 'docker'
+#install:
+#  - mvn install
+#script:
+#  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+##after_success:
+#  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+#    ./mvnw install dockerfile:build ;
+#    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+#    docker push drats/documents ;
+#    fi
