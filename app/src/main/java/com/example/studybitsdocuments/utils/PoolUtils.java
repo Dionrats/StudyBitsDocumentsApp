@@ -34,14 +34,14 @@ public class PoolUtils {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/indy_client/" + filename;
         File file = new File(path);
         FileUtils.forceMkdirParent(file);
-        FileWriter fw = new FileWriter(file);
 
-        for (String txn : txns) {
-            fw.write(txn);
-            fw.write("\n");
+        try(FileWriter fw = new FileWriter(file)) {
+            for (String txn : txns) {
+                fw.write(txn);
+                fw.write("\n");
+            }
         }
 
-        fw.close();
         return file;
     }
 

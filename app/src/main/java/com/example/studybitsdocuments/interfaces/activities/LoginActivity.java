@@ -153,12 +153,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isUserValid(String user) {
-        //TODO: check if valid
-        return true;
+        return user.matches("([a-z]|[A-Z])([a-z]|[A-Z])*");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: check if valid
         return password.length() > 3;
     }
 
@@ -218,28 +216,15 @@ public class LoginActivity extends AppCompatActivity {
                                                                                                 .path(Environment.getExternalStorageDirectory().getAbsolutePath() + "/indy_client/")
                                                                                                 .build()
             ) {
-//
-//                CompletableFuture future = indyWallet.unlock(mActivity)
-//                        .thenApply(wallet -> {
-//                            try { return Did.getListMyDidsWithMeta(wallet).thenApply(result -> Log.d(TAG, "Result: " + result.toString())); }
-//                            catch (IndyException e) { Log.e(TAG, e.getMessage()); }
-//                            return true;
-//                        });
-//
-//
-//
-//                return (DidModel) future.get();
                 //TODO please don't use .get() ...twice...
                 return Did.getListMyDidsWithMeta(indyWallet.unlock(mActivity).get()).get().replaceAll("^.|.$", "");
 
-            } catch (IndyException | ExecutionException | InterruptedException e) {
+            } catch (IndyException | ExecutionException e) {
                 Log.e(TAG, e.getMessage());
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.getMessage());
+                Thread.currentThread().interrupt();
             }
-//            catch (InterruptedException e) {
-//                Log.e(TAG, e.getMessage());
-//                Thread.currentThread().interrupt();
-//            }
-
            return null;
         }
 
