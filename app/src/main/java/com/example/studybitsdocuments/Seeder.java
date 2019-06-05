@@ -40,7 +40,7 @@ public class Seeder {
         IndyPool indyPool = IndyPool.getInstance();
 
         return CompletableFuture
-                .runAsync(IndyPool::configurePool)
+                .runAsync(IndyPool::configure)
                 .thenRun(() -> {
                     try { indyPool.open(); }
                     catch (IndyException e) {Log.e(TAG, e.getMessage());}

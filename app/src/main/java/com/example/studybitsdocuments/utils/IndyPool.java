@@ -16,11 +16,11 @@ public class IndyPool implements AutoCloseable{
     private static final String DEFAULT_POOL = "default_pool";
 
     //Attributes
-    private static String name;
-    private static String poolIP;
+    private String name;
+    private String poolIP;
 
-    private static Pool pool;
-    private static boolean open;
+    private Pool pool;
+    private boolean open;
 
     private static IndyPool instance;
     private static boolean build = false;
@@ -44,6 +44,10 @@ public class IndyPool implements AutoCloseable{
 
             return instance;
         }
+
+        private static void updateInstance(IndyPool indyPool) {
+            instance = indyPool;
+        }
     }
 
     //Contructor
@@ -53,42 +57,46 @@ public class IndyPool implements AutoCloseable{
         pool = builder.pool;
         open = builder.open;
 
-        configurePool();
+        configure();
     }
 
 
     //Static methods
     public static IndyPool getInstance() {
-        return isBuild() ? instance : new Builder().build();
+        return isBuild()? instance : new Builder().build();
     }
 
     public static void clean() {
-        name = null;
-        poolIP = null;
-        open = false;
-        pool = null;
         instance = null;
         build = false;
     }
 
-    public static boolean isBuild() {
-        return build;
+    public static CompletableFuture<Void> configure() {
+        return CompletableFuture
+                .runAsync(() -> {
+                    try { Pool.setProtocolVersion(PROTOCOL_VERSION); }
+                    catch (IndyException e) { Log.e(TAG, e.getMessage()); }
+                })
+                .thenRunAsync(() -> {
+                    try { PoolUtils.composeConfig(DEFAULT_POOL_IP, DEFAULT_POOL); }
+                    catch (IOException | IndyException e) { Log.e(TAG, e.getMessage()); }
+                })
+                .thenRun(IndyPool::complete);
     }
 
-    public static boolean isOpen() {
+    //instance methods
+    public boolean isOpen() {
         return open;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static String getPoolIP() {
+    public String getPoolIP() {
         return poolIP;
     }
 
-
-    //instance methods
     public CompletableFuture<Pool> open() throws IndyException {
         Log.d(TAG, "Opening IndyPool");
         return Pool.openPoolLedger(DEFAULT_POOL, "{}")
@@ -102,23 +110,12 @@ public class IndyPool implements AutoCloseable{
 
 
     //private methods
-    public static CompletableFuture<Void> configurePool() {
-        return CompletableFuture
-                .runAsync(() -> {
-                    try { Pool.setProtocolVersion(PROTOCOL_VERSION); }
-                    catch (IndyException e) { Log.e(TAG, e.getMessage()); }
-                })
-                .thenRunAsync(() -> {
-                    try { PoolUtils.composeConfig(DEFAULT_POOL_IP, DEFAULT_POOL); }
-                    catch (IOException | IndyException e) { Log.e(TAG, e.getMessage()); }
-                })
-                .thenRun(() -> build = true)
-                .thenRun(() -> Log.d(TAG, "Pool Ready for use"));
+    private static boolean isBuild() {
+        return build;
     }
 
-    private static void updateInstance(IndyPool indyPool) {
-        instance = indyPool;
+    private static void complete() {
+        build = true;
+        Log.d(TAG, "Pool Ready for use");
     }
-
-
 }

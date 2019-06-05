@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.studybitsdocuments.R;
-import com.example.studybitsdocuments.exceptions.WalletException;
 
 
 /**

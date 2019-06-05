@@ -26,12 +26,12 @@ public class IndyWallet implements AutoCloseable {
     private static final String DEFAULT_SEED = "00000000000000000000000000000001";
 
     //Attributes
-    private static String name;
-    private static String path;
-    private static String seed;
+    private String name;
+    private String path;
+    private String seed;
 
-    private static Wallet wallet;
-    private static boolean locked;
+    private Wallet wallet;
+    private boolean locked;
 
     private static IndyWallet instance;
     private static boolean build = false;
@@ -52,9 +52,14 @@ public class IndyWallet implements AutoCloseable {
 
         public IndyWallet build() {
             if(instance != null) throw new WalletException("IndyWallet has already been build");
-            instance = new IndyWallet(this);
-            build = true;
+            updateInstance(new IndyWallet(this));
+
             return instance;
+        }
+
+        private static void updateInstance(IndyWallet indyWallet) {
+            instance = indyWallet;
+            build = true;
         }
     }
 
@@ -74,10 +79,6 @@ public class IndyWallet implements AutoCloseable {
     }
 
     public static void clean() {
-        name = null;
-        seed = null;
-        path = null;
-        wallet = null;
         instance = null;
         build = false;
     }
@@ -86,23 +87,23 @@ public class IndyWallet implements AutoCloseable {
         return build;
     }
 
-    public static boolean isLocked() {
+    //instance methods
+    public boolean isLocked() {
         return locked;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static String getPath() {
+    public String getPath() {
         return path;
     }
 
-    public static String getSeed() {
+    public String getSeed() {
         return seed;
     }
 
-    //instance methods
     public void lock() throws IndyException {
         if(wallet == null) return;
         wallet.closeWallet().thenRun(() -> locked = true);
