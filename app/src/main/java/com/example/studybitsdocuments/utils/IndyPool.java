@@ -40,7 +40,7 @@ public class IndyPool implements AutoCloseable{
         public IndyPool build() {
             if(instance != null) throw new WalletException("IndyPool has already been build");
             Log.d(TAG, "Building IndyPool");
-            instance = new IndyPool(this);
+            updateInstance(new IndyPool(this));
 
             return instance;
         }
@@ -114,6 +114,10 @@ public class IndyPool implements AutoCloseable{
                 })
                 .thenRun(() -> build = true)
                 .thenRun(() -> Log.d(TAG, "Pool Ready for use"));
+    }
+
+    private static void updateInstance(IndyPool indyPool) {
+        instance = indyPool;
     }
 
 

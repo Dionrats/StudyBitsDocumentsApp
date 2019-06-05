@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.studybitsdocuments.R;
+import com.example.studybitsdocuments.exceptions.WalletException;
 
 
 /**
@@ -29,11 +30,6 @@ public class IdentityFragment extends Fragment {
     private String mDid;
     private String mVerkey;
     private String mName;
-
-    //ui references
-    private TextView mDidView;
-    private TextView mVerkeyView;
-    private TextView mNameView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,7 +52,6 @@ public class IdentityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //TODO Use DID entity instead.
             mDid = getArguments().getString(DID);
             mVerkey = getArguments().getString(VERKEY);
             mName = getArguments().getString(NAME);
@@ -69,10 +64,10 @@ public class IdentityFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_identity, container, false);
 
 
-        mDidView = (TextView) rootView.findViewById(R.id.did);
-        mVerkeyView = (TextView) rootView.findViewById(R.id.verkey);
-        mNameView = (TextView) rootView.findViewById(R.id.name);
-
+        //ui references
+        TextView mDidView = rootView.findViewById(R.id.did);
+        TextView mVerkeyView = rootView.findViewById(R.id.verkey);
+        TextView mNameView = rootView.findViewById(R.id.name);
 
         mDidView.setText(mDid);
         mVerkeyView.setText(mVerkey);
@@ -109,7 +104,6 @@ public class IdentityFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

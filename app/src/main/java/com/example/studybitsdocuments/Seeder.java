@@ -19,23 +19,26 @@ import java.util.concurrent.CompletableFuture;
 
 public class Seeder {
 
+    //constants
     private static final String TAG = "SB-Documents";
     private static final String WALLETPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/indy_client/";
     private static final String STUDENT_WALLET = "StudentWallet";
     private static final String SEED = "1234";
 
 
+    //constructor
+    private Seeder() {}
+
     public static CompletableFuture<Void> seed(Activity activity) {
 
         if(!needsSeeding()) {
-            CompletableFuture<Void> future = new CompletableFuture<Void>();
+            CompletableFuture<Void> future = new CompletableFuture<>();
             future.complete(null);
             return future;
         }
 
         IndyPool indyPool = IndyPool.getInstance();
 
-        //this.complete(null);
         return CompletableFuture
                 .runAsync(IndyPool::configurePool)
                 .thenRun(() -> {
@@ -49,7 +52,6 @@ public class Seeder {
                     IndyWallet.getInstance().close();
                     IndyPool.clean();
                     IndyWallet.clean();
-                    //this.complete(null);
                 });
 
     }

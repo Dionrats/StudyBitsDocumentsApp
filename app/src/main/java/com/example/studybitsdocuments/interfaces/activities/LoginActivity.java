@@ -29,7 +29,6 @@ import android.widget.Toast;
 import com.example.studybitsdocuments.R;
 import com.example.studybitsdocuments.Seeder;
 import com.example.studybitsdocuments.utils.IndyWallet;
-import com.example.studybitsdocuments.utils.WalletUtils;
 
 import org.hyperledger.indy.sdk.IndyException;
 import org.hyperledger.indy.sdk.did.Did;
@@ -65,28 +64,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mUserView = (EditText) findViewById(R.id.user);
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mUserView = findViewById(R.id.user);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mPasswordView = findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                 attemptLogin();
+                return true;
             }
+            return false;
         });
+
+        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(view -> attemptLogin());
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
